@@ -9,6 +9,16 @@
     btop
     ripgrep
     jq
+    minipro
+    tio
+
+    # verilog
+    iverilog
+    verilator
+    yosys
+    nextpnr
+    icestorm
+    surfer
 
     # language stuff
     rustup
@@ -199,8 +209,8 @@
       nixup = "sudo nix flake update ~/nixos";
 
       # edit config quickly
-      nixedit = "vim ~/nixos/configuration.nix";
-      homeedit = "vim ~/nixos/home.nix";
+      nixconf = "vim ~/nixos/configuration.nix";
+      nixhome = "vim ~/nixos/home.nix";
 
       # garbage collect old generations
       nixgc = "sudo nix-collect-garbage -d";
