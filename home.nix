@@ -54,9 +54,11 @@
       telescope-nvim
       nvim-treesitter
       nvim-lspconfig
+      gitsigns-nvim
       conform-nvim
       lualine-nvim
       nvim-web-devicons
+      which-key-nvim
       nvim-tree-lua
       kanagawa-nvim
       (pkgs.vimUtils.buildVimPlugin {
@@ -78,6 +80,9 @@
       vim.opt.tabstop = 2
       vim.opt.shiftwidth = 2
       vim.opt.softtabstop = 2
+
+      vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = 'Move to left window' })
+      vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = 'Move to right window' })
 
       local builtin = require('telescope.builtin')
       vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
@@ -154,6 +159,12 @@
       vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>', { desc = 'Toggle file tree' })
       -- focus tree
       vim.keymap.set('n', '<leader>e', ':NvimTreeFocus<CR>', { desc = 'Focus file tree' })
+
+      require('which-key').setup({
+        delay = 500
+      })
+
+      require('gitsigns').setup({})
     '';
   };
 
