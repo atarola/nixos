@@ -6,6 +6,7 @@
 
   home.packages = with pkgs; [
     # utils
+    usbutils
     btop
     ripgrep
     jq
@@ -61,6 +62,8 @@
       which-key-nvim
       nvim-tree-lua
       kanagawa-nvim
+      bufferline-nvim
+      bufdelete-nvim
       (pkgs.vimUtils.buildVimPlugin {
         name = "vim-asm_ca65";
         src = pkgs.fetchFromGitHub {
@@ -128,7 +131,6 @@
       vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = 'Code action' })
       vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show error' })
 
-
       require('lualine').setup({
         options = {
           theme = 'auto',
@@ -165,6 +167,17 @@
       })
 
       require('gitsigns').setup({})
+
+      require("bufferline").setup{
+        options = {
+          close_command = "Bdelete! %d",
+          right_mouse_command = "Bdelete! %d",
+        }
+      }
+
+      vim.keymap.set("n", "<leader>x", "<cmd>Bdelete<cr>")
+      vim.keymap.set("n", "<Tab>", "<cmd>BufferLineCycleNext<cr>")
+      vim.keymap.set("n", "<S-Tab>", "<cmd>BufferLinePrev<cr>")
     '';
   };
 

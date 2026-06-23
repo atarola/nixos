@@ -11,7 +11,10 @@
 
   users.users.atarola = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [
+      "wheel"
+      "dialout"
+    ];
     shell = pkgs.bash;
   };
 
