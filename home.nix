@@ -53,7 +53,6 @@
 
     plugins = with pkgs.vimPlugins; [
       telescope-nvim
-      nvim-treesitter
       nvim-lspconfig
       gitsigns-nvim
       conform-nvim
@@ -73,6 +72,12 @@
           sha256 = "sha256-9SoYDbGlTRY9yEC0SQCwNx+gohK4JG8MRB46ekV0+6c=";
         };
       })
+      (nvim-treesitter.withPlugins (p: [
+        p.asm
+        p.rust
+        p.python
+        p.nix
+      ]))
     ];
 
     initLua = ''
@@ -108,8 +113,12 @@
 
       vim.lsp.config('pyright', {})
       vim.lsp.config('nixd', {})
+
       vim.lsp.config('asm_lsp', {
-          filetypes = { "asm", "s" },
+        filetypes = { "asm", "s" },
+        root_dir = function(fname)
+          return vim.fs.dirname(vim.fs.find('.asm-lsp.toml', { path = fname, upward = true })[1])
+        end,
       })
 
       vim.lsp.config('rust_analyzer', {
@@ -178,6 +187,13 @@
       vim.keymap.set("n", "<leader>x", "<cmd>Bdelete<cr>")
       vim.keymap.set("n", "<Tab>", "<cmd>BufferLineCycleNext<cr>")
       vim.keymap.set("n", "<S-Tab>", "<cmd>BufferLinePrev<cr>")
+
+      vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
+        pattern = { "*.s", "*.asm" },
+        callback = function()
+          vim.treesitter.start(0, "asm")
+        end,
+      })
     '';
   };
 
