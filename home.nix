@@ -114,12 +114,6 @@
       }
       {
         mode = "n";
-        key = "<C-n>";
-        action = ":NvimTreeToggle<CR>";
-        options.desc = "Toggle file tree";
-      }
-      {
-        mode = "n";
         key = "<leader>x";
         action = "<cmd>Bdelete<cr>";
       }
@@ -203,15 +197,7 @@
         enable = true;
         settings = {
           options = {
-            theme = "auto";
-            component_separators = {
-              left = "";
-              right = "";
-            };
-            section_separators = {
-              left = "";
-              right = "";
-            };
+            theme = "seoul256";
           };
           sections = {
             lualine_a = [ "mode" ];
@@ -229,10 +215,6 @@
             lualine_z = [ "location" ];
           };
         };
-      };
-
-      nvim-tree = {
-        enable = true;
       };
 
       which-key = {
@@ -266,6 +248,7 @@
           return vim.fs.dirname(vim.fs.find('.asm-lsp.toml', { path = fname, upward = true })[1])
         end,
       })
+
       vim.lsp.enable({'asm_lsp'})
 
       vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
