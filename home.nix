@@ -45,148 +45,228 @@
     enableBashIntegration = true;
   };
 
-  programs.neovim = {
+  programs.nixvim = {
     enable = true;
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
 
-    plugins = with pkgs.vimPlugins; [
-      telescope-nvim
-      nvim-lspconfig
-      gitsigns-nvim
-      conform-nvim
-      lualine-nvim
-      nvim-web-devicons
-      which-key-nvim
-      nvim-tree-lua
-      kanagawa-nvim
-      bufferline-nvim
-      bufdelete-nvim
-      (pkgs.vimUtils.buildVimPlugin {
-        name = "vim-asm_ca65";
-        src = pkgs.fetchFromGitHub {
-          owner = "maxbane";
-          repo = "vim-asm_ca65";
-          rev = "master";
-          sha256 = "sha256-9SoYDbGlTRY9yEC0SQCwNx+gohK4JG8MRB46ekV0+6c=";
-        };
-      })
-      (nvim-treesitter.withPlugins (p: [
-        p.asm
-        p.rust
-        p.python
-        p.nix
-      ]))
+    colorschemes.kanagawa = {
+      enable = true;
+      settings = {
+        theme = "dragon";
+        background.dark = "dragon";
+      };
+    };
+
+    opts = {
+      number = true;
+      expandtab = true;
+      tabstop = 2;
+      shiftwidth = 2;
+      softtabstop = 2;
+    };
+
+    globals.mapleader = " ";
+
+    keymaps = [
+      {
+        mode = "n";
+        key = "<C-h>";
+        action = "<C-w>h";
+        options.desc = "Move to left window";
+      }
+      {
+        mode = "n";
+        key = "<C-l>";
+        action = "<C-w>l";
+        options.desc = "Move to right window";
+      }
+      {
+        mode = "n";
+        key = "gd";
+        action.__raw = "vim.lsp.buf.definition";
+        options.desc = "Go to definition";
+      }
+      {
+        mode = "n";
+        key = "K";
+        action.__raw = "vim.lsp.buf.hover";
+        options.desc = "Hover docs";
+      }
+      {
+        mode = "n";
+        key = "<leader>rn";
+        action.__raw = "vim.lsp.buf.rename";
+        options.desc = "Rename";
+      }
+      {
+        mode = "n";
+        key = "<leader>ca";
+        action.__raw = "vim.lsp.buf.code_action";
+        options.desc = "Code action";
+      }
+      {
+        mode = "n";
+        key = "<leader>e";
+        action.__raw = "vim.diagnostic.open_float";
+        options.desc = "Show error";
+      }
+      {
+        mode = "n";
+        key = "<C-n>";
+        action = ":NvimTreeToggle<CR>";
+        options.desc = "Toggle file tree";
+      }
+      {
+        mode = "n";
+        key = "<leader>x";
+        action = "<cmd>Bdelete<cr>";
+      }
+      {
+        mode = "n";
+        key = "<Tab>";
+        action = "<cmd>BufferLineCycleNext<cr>";
+      }
+      {
+        mode = "n";
+        key = "<S-Tab>";
+        action = "<cmd>BufferLinePrev<cr>";
+      }
     ];
 
-    initLua = ''
-      vim.g.mapleader = " "
+    plugins = {
+      telescope = {
+        enable = true;
+        keymaps = {
+          "<leader>ff" = {
+            action = "find_files";
+            options.desc = "Telescope find files";
+          };
+          "<leader>fg" = {
+            action = "live_grep";
+            options.desc = "Telescope live grep";
+          };
+          "<leader>fb" = {
+            action = "buffers";
+            options.desc = "Telescope buffers";
+          };
+          "<leader>fh" = {
+            action = "help_tags";
+            options.desc = "Telescope help tags";
+          };
+        };
+      };
 
-      vim.opt.number = true
-      vim.opt.expandtab = true
-      vim.opt.tabstop = 2
-      vim.opt.shiftwidth = 2
-      vim.opt.softtabstop = 2
+      treesitter = {
+        enable = true;
+        settings.highlight.enable = true;
+        grammarPackages = with pkgs.vimPlugins.nvim-treesitter.passthru.builtGrammars; [
+          asm
+          rust
+          python
+          nix
+        ];
+      };
 
-      vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = 'Move to left window' })
-      vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = 'Move to right window' })
+      lsp = {
+        enable = true;
+        servers = {
+          pyright.enable = true;
+          nixd.enable = true;
+          rust_analyzer = {
+            enable = true;
+            installCargo = false;
+            installRustc = false;
+            settings.checkOnSave.command = "clippy";
+          };
+        };
+      };
 
-      local builtin = require('telescope.builtin')
-      vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
-      vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
-      vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
-      vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
-
-      require('conform').setup({
+      conform-nvim = {
+        enable = true;
+        settings = {
           formatters_by_ft = {
-              python = { "ruff_format" },
-              rust = { "rustfmt" },
-              lua = { "stylua" },
-              nix = { "nixfmt" },
-          },
+            python = [ "ruff_format" ];
+            rust = [ "rustfmt" ];
+            lua = [ "stylua" ];
+            nix = [ "nixfmt" ];
+          };
           format_on_save = {
-              timeout_ms = 500,
-              lsp_fallback = true,
-          },
-      });
+            timeout_ms = 500;
+            lsp_fallback = true;
+          };
+        };
+      };
 
-      vim.lsp.config('pyright', {})
-      vim.lsp.config('nixd', {})
+      lualine = {
+        enable = true;
+        settings = {
+          options = {
+            theme = "auto";
+            component_separators = {
+              left = "";
+              right = "";
+            };
+            section_separators = {
+              left = "";
+              right = "";
+            };
+          };
+          sections = {
+            lualine_a = [ "mode" ];
+            lualine_b = [
+              "branch"
+              "diff"
+              "diagnostics"
+            ];
+            lualine_c = [ "filename" ];
+            lualine_x = [
+              "encoding"
+              "filetype"
+            ];
+            lualine_y = [ "progress" ];
+            lualine_z = [ "location" ];
+          };
+        };
+      };
 
+      nvim-tree = {
+        enable = true;
+      };
+
+      which-key = {
+        enable = true;
+        settings.delay = 500;
+      };
+
+      gitsigns.enable = true;
+
+      web-devicons.enable = true;
+
+      bufferline = {
+        enable = true;
+        settings.options = {
+          close_command = "Bdelete! %d";
+          right_mouse_command = "Bdelete! %d";
+        };
+      };
+    };
+
+    extraPlugins = with pkgs.vimPlugins; [
+      bufdelete-nvim
+      nvim-web-devicons
+    ];
+
+    # asm-lsp with custom root_dir, and the asm treesitter autocmd
+    extraConfigLua = ''
       vim.lsp.config('asm_lsp', {
         filetypes = { "asm", "s" },
         root_dir = function(fname)
           return vim.fs.dirname(vim.fs.find('.asm-lsp.toml', { path = fname, upward = true })[1])
         end,
       })
-
-      vim.lsp.config('rust_analyzer', {
-        settings = {
-          ["rust-analyzer"] = {
-            checkOnSave = {
-              command = "clippy",
-            },
-          },
-        },
-      })
-
-      vim.lsp.enable({'pyright', 'nixd', 'asm_lsp', 'rust_analyzer'})
-
-      -- keybindings, these only activate when lsp is attached
-      vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = 'Go to definition' })
-      vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'Hover docs' })
-      vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = 'Rename' })
-      vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = 'Code action' })
-      vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show error' })
-
-      require('lualine').setup({
-        options = {
-          theme = 'auto',
-          component_separators = { left = '\u{e0b1}', right = '\u{e0b3}'},
-          section_separators = { left = '\u{e0b0}', right = '\u{e0b2}'},
-        },
-        sections = {
-          lualine_a = {'mode'},
-          lualine_b = {'branch', 'diff', 'diagnostics'},
-          lualine_c = {'filename'},
-          lualine_x = {'encoding', 'filetype'},
-          lualine_y = {'progress'},
-          lualine_z = {'location'},
-        },
-      })
-
-      require('kanagawa').setup({
-        theme = 'dragon',  -- wave, dragon, lotus
-        background = {
-          dark = "dragon"
-        }
-      })
-      vim.cmd("colorscheme kanagawa")
-
-      require('nvim-tree').setup({})
-
-      -- toggle with ctrl+n
-      vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>', { desc = 'Toggle file tree' })
-      -- focus tree
-      vim.keymap.set('n', '<leader>e', ':NvimTreeFocus<CR>', { desc = 'Focus file tree' })
-
-      require('which-key').setup({
-        delay = 500
-      })
-
-      require('gitsigns').setup({})
-
-      require("bufferline").setup{
-        options = {
-          close_command = "Bdelete! %d",
-          right_mouse_command = "Bdelete! %d",
-        }
-      }
-
-      vim.keymap.set("n", "<leader>x", "<cmd>Bdelete<cr>")
-      vim.keymap.set("n", "<Tab>", "<cmd>BufferLineCycleNext<cr>")
-      vim.keymap.set("n", "<S-Tab>", "<cmd>BufferLinePrev<cr>")
+      vim.lsp.enable({'asm_lsp'})
 
       vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
         pattern = { "*.s", "*.asm" },
@@ -258,18 +338,6 @@
       # list generations
       nixgen = "sudo nix-env --list-generations";
     };
-  };
-
-  programs.vim = {
-    enable = true;
-    settings = {
-      expandtab = true;
-      tabstop = 4;
-      shiftwidth = 4;
-    };
-    extraConfig = ''
-      set softtabstop=4
-    '';
   };
 
   home.stateVersion = "26.05";
