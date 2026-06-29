@@ -12,6 +12,7 @@
     jq
     minipro
     tio
+    direnv
 
     # verilog
     iverilog
@@ -298,6 +299,8 @@
           chmod 600 "$SSH_ENV"
           source "$SSH_ENV" > /dev/null
       fi
+
+      eval "$(direnv hook bash)"
     '';
 
     # set some aliases, feel free to add more or remove some
