@@ -1,95 +1,99 @@
-{ pkgs, ... }:
+{ pkgs, lib, config, ... }:
 
 {
-  home.packages = with pkgs; [
-    usbutils
-    btop
-    ripgrep
-    jq
-    tio
-    direnv
-  ];
+  options.shell.enable = lib.mkEnableOption "enables shell";
 
-  services.ssh-agent.enable = true;
-
-  programs.fzf = {
-    enable = true;
-    enableBashIntegration = true;
-  };
-
-  programs.git = {
-    enable = true;
-    settings = {
-      user.name = "atarola";
-      user.email = "anthony.tarola@gmail.com";
-      init.defaultBranch = "main";
-    };
-  };
-
-  programs.ssh = {
-    enable = true;
-    enableDefaultConfig = false;
-    settings = {
-      "*" = {
-        AddKeysToAgent = "yes";
-      };
-    };
-  };
-
-  services.local-code-context = {
-    enable = true;
-
-    workspaces = [
-      "/home/atarola/code"
+  config = lib.mkIf config.shell.enable {
+    home.packages = with pkgs; [
+      usbutils
+      btop
+      ripgrep
+      jq
+      tio
+      direnv
     ];
 
-    db = "/home/atarola/.local/share/local-code-context/codebase_index";
+    services.ssh-agent.enable = true;
 
-    autoStart = false;
-  };
+    programs.fzf = {
+      enable = true;
+      enableBashIntegration = true;
+    };
 
-  programs.bash = {
-    enable = true;
-    enableCompletion = true;
+    programs.git = {
+      enable = true;
+      settings = {
+        user.name = "atarola";
+        user.email = "anthony.tarola@gmail.com";
+        init.defaultBranch = "main";
+      };
+    };
 
-    # TODO add your custom bashrc here
-    bashrcExtra = ''
-      export PATH="$PATH:$HOME/bin:$HOME/.local/bin"
+    programs.ssh = {
+      enable = true;
+      enableDefaultConfig = false;
+      settings = {
+        "*" = {
+          AddKeysToAgent = "yes";
+        };
+      };
+    };
 
-      SSH_ENV="$HOME/.ssh/agent-env"
+    services.local-code-context = {
+      enable = true;
 
-      if [ -f "$SSH_ENV" ]; then
-          source "$SSH_ENV" > /dev/null
-      fi
+      workspaces = [
+        "/home/atarola/code"
+      ];
 
-      if [ -z "$SSH_AUTH_SOCK" ] || ! ssh-add -l &>/dev/null; then
-          ssh-agent | sed 's/^echo/#echo/' > "$SSH_ENV"
-          chmod 600 "$SSH_ENV"
-          source "$SSH_ENV" > /dev/null
-      fi
+      db = "/home/atarola/.local/share/local-code-context/codebase_index";
 
-      eval "$(direnv hook bash)"
-    '';
+      autoStart = false;
+    };
 
-    shellAliases = {
-      urldecode = "python3 -c 'import sys, urllib.parse as ul; print(ul.unquote_plus(sys.stdin.read()))'";
-      urlencode = "python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'";
+    programs.bash = {
+      enable = true;
+      enableCompletion = true;
 
-      # rebuild and switch in one go from wherever you are
-      nixswitch = "sudo nixos-rebuild switch --flake ~/nixos#nixos";
+      # TODO add your custom bashrc here
+      bashrcExtra = ''
+        export PATH="$PATH:$HOME/bin:$HOME/.local/bin"
 
-      # update all flake inputs (nixpkgs, home-manager, etc.)
-      nixup = "sudo nix flake update ~/nixos";
+        SSH_ENV="$HOME/.ssh/agent-env"
 
-      # edit config quickly
-      nixconf = "vim ~/nixos/configuration.nix";
-      nixhome = "vim ~/nixos/home.nix";
+        if [ -f "$SSH_ENV" ]; then
+            source "$SSH_ENV" > /dev/null
+        fi
 
-      # garbage collect old generations
-      nixgc = "sudo nix-collect-garbage -d";
+        if [ -z "$SSH_AUTH_SOCK" ] || ! ssh-add -l &>/dev/null; then
+            ssh-agent | sed 's/^echo/#echo/' > "$SSH_ENV"
+            chmod 600 "$SSH_ENV"
+            source "$SSH_ENV" > /dev/null
+        fi
 
-      # list generations
-      nixgen = "sudo nix-env --list-generations";
+        eval "$(direnv hook bash)"
+      '';
+
+      shellAliases = {
+        urldecode = "python3 -c 'import sys, urllib.parse as ul; print(ul.unquote_plus(sys.stdin.read()))'";
+        urlencode = "python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'";
+
+        # rebuild and switch in one go from wherever you are
+        nixswitch = "sudo nixos-rebuild switch --flake ~/nixos#nixos";
+
+        # update all flake inputs (nixpkgs, home-manager, etc.)
+        nixup = "sudo nix flake update ~/nixos";
+
+        # edit config quickly
+        nixconf = "vim ~/nixos/configuration.nix";
+        nixhome = "vim ~/nixos/home.nix";
+
+        # garbage collect old generations
+        nixgc = "sudo nix-collect-garbage -d";
+
+        # list generations
+        nixgen = "sudo nix-env --list-generations";
+      };
     };
   };
 }
