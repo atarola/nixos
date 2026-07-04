@@ -40,7 +40,11 @@
             home-manager.extraSpecialArgs = { inherit inputs; };
             home-manager.users.atarola = {
               imports = [ ./home.nix ];
-              development.enable = true;
+              toolchains.enable = true;
+              toolchains.verilog.enable = true;
+              toolchains.rust.enable = true;
+              toolchains.python.enable = true;
+              toolchains.cc65.enable = true;
               shell.enable = true;
               nvim.enable = true;
               opencode.enable = true;

@@ -6,7 +6,7 @@
 {
   imports = [
     inputs.local-code-context.homeManagerModules.default
-    ./home/development.nix
+    ./home/toolchains.nix
     ./home/shell.nix
     ./home/nvim.nix
     ./home/opencode.nix
