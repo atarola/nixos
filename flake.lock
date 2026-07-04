@@ -58,6 +58,26 @@
         "type": "github"
       }
     },
+    "local-code-context": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783151678,
+        "narHash": "sha256-0Y35ID+M9N9XyieUr4N1wJXdFt106lBNF+dYoXWpdXY=",
+        "owner": "atarola",
+        "repo": "local-code-context",
+        "rev": "440d26d85f6de0f3a41987907ca54cd5bcdc2601",
+        "type": "github"
+      },
+      "original": {
+        "owner": "atarola",
+        "repo": "local-code-context",
+        "type": "github"
+      }
+    },
     "nixos-wsl": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -122,6 +142,7 @@
     "root": {
       "inputs": {
         "home-manager": "home-manager",
+        "local-code-context": "local-code-context",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs",
         "nixvim": "nixvim"

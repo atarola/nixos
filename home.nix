@@ -1,6 +1,16 @@
-{ config, pkgs, ... }:
+{
+  inputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 {
+  imports = [
+    inputs.local-code-context.homeManagerModules.default
+  ];
+
   home.username = "atarola";
   home.homeDirectory = "/home/atarola";
 
@@ -13,6 +23,7 @@
     minipro
     tio
     direnv
+    opencode
 
     # verilog
     iverilog
@@ -173,7 +184,10 @@
             enable = true;
             installCargo = false;
             installRustc = false;
-            settings.checkOnSave.command = "clippy";
+            settings = {
+              checkOnSave = true;
+              check.command = "clippy";
+            };
           };
         };
       };
@@ -278,6 +292,18 @@
         AddKeysToAgent = "yes";
       };
     };
+  };
+
+  services.local-code-context = {
+    enable = true;
+
+    workspaces = [
+      "/home/atarola/code"
+    ];
+
+    db = "/home/atarola/.local/share/local-code-context/codebase_index";
+
+    autoStart = false;
   };
 
   programs.bash = {
