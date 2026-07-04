@@ -65,11 +65,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783151678,
-        "narHash": "sha256-0Y35ID+M9N9XyieUr4N1wJXdFt106lBNF+dYoXWpdXY=",
+        "lastModified": 1783205272,
+        "narHash": "sha256-qOaonZIYWmuodOZdfYKEfMASEiNw8jlS8gzXKuueBTI=",
         "owner": "atarola",
         "repo": "local-code-context",
-        "rev": "440d26d85f6de0f3a41987907ca54cd5bcdc2601",
+        "rev": "94a685277d0a2f40597bab1521db3f72132dd096",
         "type": "github"
       },
       "original": {

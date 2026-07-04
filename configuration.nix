@@ -6,8 +6,6 @@
 }:
 
 {
-  nixpkgs.config.allowUnfree = true;
-
   wsl.enable = true;
   wsl.defaultUser = "atarola";
   wsl.useWindowsDriver = true;

@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, lib, config, osConfig, ... }:
 
 {
   options.shell.enable = lib.mkEnableOption "enables shell";
@@ -67,7 +67,7 @@
         urlencode = "python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'";
 
         # rebuild and switch in one go from wherever you are
-        nixswitch = "sudo nixos-rebuild switch --flake ~/nixos#${config.osConfig.networking.hostName}";
+        nixswitch = "sudo nixos-rebuild switch --flake ~/nixos#${osConfig.networking.hostName}";
 
         # update all flake inputs (nixpkgs, home-manager, etc.)
         nixup = "sudo nix flake update ~/nixos";

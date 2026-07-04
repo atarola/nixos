@@ -1,26 +1,46 @@
-{ pkgs, lib, config, ... }:
+{ inputs, pkgs, lib, config, ... }:
 
+let
+  localCodeContextMcp = "${config.services.local-code-context.package}/bin/code-context-mcp";
+  localCodeContextDb = config.services.local-code-context.db;
+in
 {
   options.opencode.enable = lib.mkEnableOption "enables opencode";
 
   config = lib.mkIf config.opencode.enable {
+    services.local-code-context.package = inputs.local-code-context.packages.${pkgs.stdenv.hostPlatform.system}.default;
+
     home.packages = with pkgs; [
       opencode
+    ];
+
+    services.local-code-context.workspaces = [
+      "${config.home.homeDirectory}/code"
+    ];
+
+    services.local-code-context.repos = [
+      "${config.home.homeDirectory}/nixos"
     ];
 
     services.local-code-context = {
       enable = true;
 
-      workspaces = [
-        "/home/atarola/code"
-      ];
-
-      db = "/home/atarola/.local/share/local-code-context/codebase_index";
-
       autoStart = false;
     };
 
     xdg.configFile = {
+      "opencode/agents/planning-notetaker.md" = {
+        source = ./opencode/agents/planning-notetaker.md;
+      };
+
+      "opencode/agents/repo-notetaker.md" = {
+        source = ./opencode/agents/repo-notetaker.md;
+      };
+
+      "opencode/skills/planning/SKILL.md" = {
+        source = ./opencode/skills/planning.md;
+      };
+
       "opencode/opencode.jsonc" = {
         force = true;
         text = ''
@@ -31,13 +51,16 @@
               "local-code-context": {
                 "type": "local",
                 "command": [
-                  "nix",
-                  "run",
-                  "/home/atarola/code/local-code-context#mcp",
-                  "--",
+                  "${localCodeContextMcp}",
                   "--db",
-                  "/home/atarola/.local/share/local-code-context/codebase_index"
+                  "${localCodeContextDb}"
                 ]
+              }
+            },
+            "permission": {
+              "external_directory": {
+                "~/.config/opencode/**": "allow",
+                "~/notes/**": "allow"
               }
             }
           }

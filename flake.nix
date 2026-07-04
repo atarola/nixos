@@ -28,10 +28,18 @@
       ...
     }@inputs:
     let
-      mkMachine = name: let machine = import ./machines/${name}.nix { inherit inputs nixpkgs nixos-wsl home-manager nixvim; }; in nixpkgs.lib.nixosSystem {
-        system = machine.system;
-        modules = machine.modules;
-      };
+      mkMachine = name:
+        let
+          machine = import ./machines/${name}.nix { inherit inputs nixpkgs nixos-wsl home-manager nixvim; };
+        in
+        nixpkgs.lib.nixosSystem {
+          modules = machine.modules ++ [
+            {
+              nixpkgs.hostPlatform = machine.system;
+              nixpkgs.config.allowUnfree = true;
+            }
+          ];
+        };
     in {
       nixosConfigurations = {
         speedy = mkMachine "speedy";
