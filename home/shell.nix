@@ -79,7 +79,7 @@
         urlencode = "python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'";
 
         # rebuild and switch in one go from wherever you are
-        nixswitch = "sudo nixos-rebuild switch --flake ~/nixos#nixos";
+        nixswitch = "sudo nixos-rebuild switch --flake ~/nixos#${config.osConfig.networking.hostName}";
 
         # update all flake inputs (nixpkgs, home-manager, etc.)
         nixup = "sudo nix flake update ~/nixos";
@@ -87,6 +87,7 @@
         # edit config quickly
         nixconf = "vim ~/nixos/configuration.nix";
         nixhome = "vim ~/nixos/home.nix";
+        nixmachine = "vim ~/nixos/machines/speedy.nix";
 
         # garbage collect old generations
         nixgc = "sudo nix-collect-garbage -d";

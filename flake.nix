@@ -27,33 +27,14 @@
       nixvim,
       ...
     }@inputs:
-    {
-      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          nixos-wsl.nixosModules.default
-          ./configuration.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit inputs; };
-            home-manager.users.atarola = {
-              imports = [ ./home.nix ];
-              toolchains.enable = true;
-              toolchains.verilog.enable = true;
-              toolchains.rust.enable = true;
-              toolchains.python.enable = true;
-              toolchains.cc65.enable = true;
-              shell.enable = true;
-              nvim.enable = true;
-              opencode.enable = true;
-            };
-            home-manager.sharedModules = [
-              nixvim.homeModules.nixvim
-            ];
-          }
-        ];
+    let
+      mkMachine = name: let machine = import ./machines/${name}.nix { inherit inputs nixpkgs nixos-wsl home-manager nixvim; }; in nixpkgs.lib.nixosSystem {
+        system = machine.system;
+        modules = machine.modules;
+      };
+    in {
+      nixosConfigurations = {
+        speedy = mkMachine "speedy";
       };
     };
 }
