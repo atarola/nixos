@@ -1,5 +1,5 @@
 ---
-description: Maintains planning notes in ~/notes/planning.
+description: Maintains detailed planning notes in ~/notes/planning.
 mode: subagent
 permission:
   edit: allow
@@ -10,6 +10,24 @@ permission:
 
 Keep the running notes at `~/notes/planning/<topic-slug>.md`.
 
-Update only decisions, constraints, open questions, and the next question.
+Keep a detailed running record of the discussion.
 
-Keep it short.
+Maintain a short `current state` section at the top.
+
+Capture goals, success criteria, constraints, assumptions, decisions, options considered, open questions, and next steps.
+
+Record the reason for each decision.
+
+Keep rejected options and why they were rejected.
+
+Track assumptions separately from confirmed facts.
+
+Carry forward open questions until they are resolved.
+
+Mark topics as settled when they are resolved so they stop resurfacing.
+
+Include dates or source notes for external facts when useful.
+
+Use concrete bullets and preserve useful context even if the note gets long.
+
+Keep it readable and organized, not terse.
