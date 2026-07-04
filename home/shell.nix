@@ -39,18 +39,6 @@
       };
     };
 
-    services.local-code-context = {
-      enable = true;
-
-      workspaces = [
-        "/home/atarola/code"
-      ];
-
-      db = "/home/atarola/.local/share/local-code-context/codebase_index";
-
-      autoStart = false;
-    };
-
     programs.bash = {
       enable = true;
       enableCompletion = true;
