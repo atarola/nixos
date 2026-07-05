@@ -5,10 +5,53 @@
 
   modules = [
     nixos-wsl.nixosModules.default
-    ../configuration.nix
+    ../packages.nix
+    ({ lib, pkgs, ... }:
     {
       networking.hostName = "speedy";
-    }
+
+      wsl.enable = true;
+      wsl.defaultUser = "atarola";
+      wsl.useWindowsDriver = true;
+
+      hardware.nvidia-container-toolkit = {
+        enable = true;
+        suppressNvidiaDriverAssertion = true;
+      };
+
+      programs.nix-ld = {
+        enable = true;
+        libraries = with pkgs; [
+          stdenv.cc.cc
+          glibc
+        ];
+      };
+
+      environment.sessionVariables = {
+        NIX_LD_LIBRARY_PATH = lib.mkForce "/usr/lib/wsl/lib:/run/current-system/sw/share/nix-ld/lib";
+      };
+
+      users.users.atarola = {
+        isNormalUser = true;
+        extraGroups = [
+          "wheel"
+          "dialout"
+        ];
+        shell = pkgs.bash;
+      };
+
+      fonts.packages = with pkgs; [
+        nerd-fonts.anonymice
+        nerd-fonts.jetbrains-mono
+      ];
+
+      nix.settings.experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+
+      system.stateVersion = "26.05";
+    })
     home-manager.nixosModules.home-manager
     {
       home-manager.useGlobalPkgs = true;

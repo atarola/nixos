@@ -73,7 +73,6 @@
         nixup = "sudo nix flake update ~/nixos";
 
         # edit config quickly
-        nixconf = "vim ~/nixos/configuration.nix";
         nixhome = "vim ~/nixos/home.nix";
         nixmachine = "vim ~/nixos/machines/speedy.nix";
 

@@ -30,14 +30,17 @@ in
 
     xdg.configFile = {
       "opencode/agents/planning-notetaker.md" = {
+        force = true;
         source = ./opencode/agents/planning-notetaker.md;
       };
 
       "opencode/agents/repo-notetaker.md" = {
+        force = true;
         source = ./opencode/agents/repo-notetaker.md;
       };
 
       "opencode/skills/planning/SKILL.md" = {
+        force = true;
         source = ./opencode/skills/planning.md;
       };
 
