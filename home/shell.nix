@@ -70,7 +70,7 @@
         nixswitch = "sudo nixos-rebuild switch --flake ~/nixos#${osConfig.networking.hostName}";
 
         # update all flake inputs (nixpkgs, home-manager, etc.)
-        nixup = "sudo nix flake update ~/nixos";
+        nixup = "nix flake update --flake ~/nixos";
 
         # edit config quickly
         nixhome = "vim ~/nixos/home.nix";
