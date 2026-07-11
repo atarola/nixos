@@ -98,6 +98,7 @@ in
           ## Editing Rules
           * Prefer the smallest correct change that fulfills the request.
           * Preserve existing user work exactly as written.
+          * Preserve existing structure and intent unless the user explicitly asks to replace, normalize, or refactor it.
           * Do not modify a file with uncommitted user changes unless the user explicitly approves that file.
           * If a file is dirty, show the intended diff and wait for approval before editing it.
           * Do not refactor, improve, or clean up code beyond the exact scope requested.
