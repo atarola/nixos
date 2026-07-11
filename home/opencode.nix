@@ -12,6 +12,7 @@ in
 
     home.packages = with pkgs; [
       opencode
+      poppler-utils
     ];
 
     services.local-code-context.workspaces = [
