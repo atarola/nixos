@@ -98,6 +98,8 @@ in
           ## Editing Rules
           * Prefer the smallest correct change that fulfills the request.
           * Preserve existing user work exactly as written.
+          * Do not modify a file with uncommitted user changes unless the user explicitly approves that file.
+          * If a file is dirty, show the intended diff and wait for approval before editing it.
           * Do not refactor, improve, or clean up code beyond the exact scope requested.
           * Do not add comments, docstrings, or type annotations to unchanged code.
           * If a task is implemented, run or verify with the smallest relevant unit check before declaring success.
