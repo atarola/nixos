@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ inputs, pkgs, lib, config, ... }:
 
 {
   options.nvim.enable = lib.mkEnableOption "enables nvim";
@@ -9,6 +9,7 @@
       defaultEditor = true;
       viAlias = true;
       vimAlias = true;
+      nixpkgs.source = inputs.nixpkgs;
 
       colorschemes.kanagawa = {
         enable = true;

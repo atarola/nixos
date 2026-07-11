@@ -22,6 +22,9 @@
       ])
       ++ lib.optionals config.toolchains.rust.enable (with pkgs; [
         rustup
+        clang
+        lld
+        elf2uf2-rs
       ])
       ++ lib.optionals config.toolchains.python.enable (with pkgs; [
         python3
@@ -31,5 +34,11 @@
         minipro
         cc65
       ]);
+
+    home.sessionVariables = lib.mkIf config.toolchains.rust.enable {
+      CC = "clang";
+      CXX = "clang++";
+      CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = "clang";
+    };
   };
 }
