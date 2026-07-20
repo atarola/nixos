@@ -1,0 +1,7 @@
+{
+  "enableToast": false,
+  "formatStyle": "allWindows",
+  "tuiSidebarPanel": {
+    "enabled": true
+  }
+}

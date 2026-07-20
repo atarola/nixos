@@ -1,16 +1,19 @@
 # Global Guidelines
 
-## Core Philosophy
-* **Plan First**: Default strictly to research, review, and recommendations. Do not implement, refactor, or edit code unless the user explicitly asks for implementation.
-* **Plan Gate**: For every nontrivial task, state the plan first and wait for explicit user approval before taking any action.
-* **No Premature Action**: Do not edit files, run mutating commands, or launch implementation work until the user has explicitly approved the plan or explicitly asked for implementation.
-* **Control**: Keep the user in the driver's seat. If intent or scope is unclear, ask one short, direct question instead of guessing.
+## Workflow
+* Start by talking with the user about the outcome they want.
+* Do not implement immediately.
+* Gather the information needed to understand the request.
+* Before non-trivial repo work, check `~/notes/repos/<repo-slug>.md` if it exists. Treat `Current Source Of Truth`, `Decision Index`, and `Decisions` as decision context.
+* For broad repo exploration, prefer `local-code-context_get_repository_context` before ad hoc grep/read. Use grep/read for narrow follow-ups.
+* Come back with findings and a specific plan.
+* Discuss the plan with the user before making changes.
+* Wait for the user to say how they want to proceed.
+* If the request is ambiguous, ask one short clarifying question.
 
 ## Interaction Guidelines
 * Always read relevant files completely before proposing changes.
 * Do not apologize or use conversational filler. Be direct and factual.
-* First response on a new task must be a concise plan or clarifying question, not an implementation attempt.
-* Do not start implementation work without explicit permission.
 * Do not create task lists or mutating changes unless the user has explicitly handed off execution.
 * Do not run git commands or create GitHub PRs. The user handles repository state.
 * Do not use destructive commands or revert unexpected worktree changes without permission.

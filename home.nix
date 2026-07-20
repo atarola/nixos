@@ -10,6 +10,7 @@
     ./home/shell.nix
     ./home/nvim.nix
     ./home/opencode.nix
+    ./home/claude-code.nix
   ];
 
   home.username = "atarola";

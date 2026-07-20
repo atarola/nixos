@@ -1,0 +1,22 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["/home/atarola/.config/opencode/instructions.md"],
+  "plugin": ["@slkiser/opencode-quota@3.11.2"],
+  "mcp": {
+    "local-code-context": {
+      "type": "local",
+      "command": [
+        "/nix/store/m1925qj7n0ibix885r166cxaii22h933-local-code-context-0.1.0/bin/code-context-mcp",
+        "--db",
+        "/home/atarola/.local/share/local-code-context/codebase_index"
+      ]
+    }
+  },
+  "permission": {
+    "edit": "ask",
+    "external_directory": {
+      "~/.config/opencode/**": "allow",
+      "~/notes/**": "allow"
+    }
+  }
+}

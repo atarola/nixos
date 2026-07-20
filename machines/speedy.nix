@@ -6,9 +6,12 @@
   modules = [
     nixos-wsl.nixosModules.default
     ../packages.nix
+    ../modules/ollama.nix
     ({ lib, pkgs, ... }:
     {
       networking.hostName = "speedy";
+
+      ollama.enable = false;
 
       wsl.enable = true;
       wsl.defaultUser = "atarola";
@@ -67,6 +70,7 @@
         shell.enable = true;
         nvim.enable = true;
         opencode.enable = true;
+        claude-code.enable = true;
       };
       home-manager.sharedModules = [
         nixvim.homeModules.nixvim
